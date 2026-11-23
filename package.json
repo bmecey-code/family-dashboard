@@ -1,0 +1,12 @@
+{
+  "name": "family-dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Static installable family calendar and weather dashboard",
+  "scripts": {
+    "start": "npx http-server public -p 8080 -c-1"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}

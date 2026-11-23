@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#101b2d">
+  <meta name="description" content="A calm, full-screen family calendar and weather dashboard.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <title>Family Dashboard</title>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><div class="brand-mark">F</div><div><div class="brand-name">Family Dashboard</div><div class="brand-date" id="todayLabel">Your day at a glance</div></div></div>
+    <div class="top-actions">
+      <div id="connectionStatus" class="status">Not connected</div>
+      <button class="icon-button" id="settingsOpen" aria-label="Settings" title="Settings">⚙</button>
+    </div>
+  </header>
+
+  <main class="dashboard">
+    <section class="weather-panel panel">
+      <div class="weather-main">
+        <div>
+          <div class="eyebrow" id="weatherLocation">LOCAL WEATHER</div>
+          <div class="weather-temp" id="temperature">--°</div>
+          <div class="weather-description" id="weatherDescription">Set your location in settings</div>
+          <div class="weather-feels" id="feelsLike"></div>
+        </div>
+        <div class="weather-icon" id="weatherIcon">☀️</div>
+      </div>
+      <div class="weather-details">
+        <div><span>Feels like</span><strong id="detailFeels">--</strong></div>
+        <div><span>Wind</span><strong id="detailWind">--</strong></div>
+        <div><span>Humidity</span><strong id="detailHumidity">--</strong></div>
+      </div>
+      <div class="forecast" id="forecast"></div>
+      <div class="moon-card">
+        <div class="moon-heading"><span class="eyebrow">MOON PHASE</span><strong id="moonPhaseName">--</strong></div>
+        <div class="moon-visual" id="moonVisual" aria-label="Current moon phase">🌙</div>
+        <div class="moon-meta"><span id="moonIllumination">--% illuminated</span><span id="moonNextPhase"> </span></div>
+      </div>
+    </section>
+
+    <section class="calendar-panel panel">
+      <div class="section-heading">
+        <div><div class="eyebrow">YOUR FAMILY</div><h1>Calendar</h1></div>
+        <div class="calendar-controls">
+          <button class="small-button" id="prevMonth" aria-label="Previous month">‹</button>
+          <div id="monthLabel" class="month-label"></div>
+          <button class="small-button" id="nextMonth" aria-label="Next month">›</button>
+          <button class="today-button" id="goToday">Today</button>
+        </div>
+      </div>
+      <div class="calendar-legend" id="calendarLegend"><span class="muted">Connect Google Calendar to load your calendars.</span></div>
+      <div class="calendar-grid" id="calendarGrid">
+        <div class="empty-state">Connect your calendars in Settings to get started.</div>
+      </div>
+    </section>
+
+    <aside class="agenda-panel panel">
+      <div class="section-heading agenda-heading"><div><div class="eyebrow">WHAT'S NEXT</div><h2>Upcoming</h2></div><div class="agenda-date" id="agendaDate"></div></div>
+      <div class="agenda-list" id="agendaList"><div class="empty-state">Your upcoming events will appear here.</div></div>
+      <div class="agenda-footer"><span class="live-dot"></span> Calendar updates when refreshed</div>
+    </aside>
+  </main>
+
+  <div class="settings-backdrop" id="settingsBackdrop" hidden>
+    <section class="settings-sheet" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+      <div class="settings-header"><div><div class="eyebrow">PERSONALIZE</div><h2 id="settingsTitle">Dashboard settings</h2></div><button class="icon-button" id="settingsClose" aria-label="Close">×</button></div>
+      <div class="settings-content">
+        <section class="setting-group">
+          <h3>Google Calendar</h3>
+          <p>Connect your Google account to display calendars you can access. Your events are read-only.</p>
+          <label for="clientId">Google OAuth Client ID</label>
+          <input id="clientId" type="text" placeholder="123456789-abc.apps.googleusercontent.com" autocomplete="off">
+          <div class="button-row"><button class="primary-button" id="saveClient">Save Client ID</button><button class="secondary-button" id="connectGoogle">Connect Google</button><button class="secondary-button" id="disconnectGoogle">Disconnect</button></div>
+          <p class="help">Create a Web application OAuth client in Google Cloud, enable Google Calendar API, and add this app's website address as an authorized JavaScript origin. See SETUP.md.</p>
+          <div id="calendarChoices" class="calendar-choices"></div>
+        </section>
+        <section class="setting-group">
+          <h3>iCloud calendars</h3>
+          <p>To include iCloud calendars, subscribe to their read-only calendar links in Google Calendar. They'll then appear in the calendar list above.</p>
+          <p class="help">Google Calendar on the web → Other calendars → From URL → paste your iCloud public calendar link. For private calendars, use Apple's sharing options carefully; a public calendar URL can be viewed by anyone who has it.</p>
+        </section>
+        <section class="setting-group">
+          <h3>Weather location</h3>
+          <label for="locationInput">City or ZIP code</label>
+          <div class="button-row"><input id="locationInput" type="text" placeholder="e.g. Stockton, California"><button class="primary-button" id="saveLocation">Set location</button></div>
+          <p class="help">Weather is provided by Open-Meteo. No API key is required for personal, non-commercial use.</p>
+        </section>
+        <section class="setting-group">
+          <h3>Display</h3>
+          <label class="toggle-row"><span>24-hour time</span><input type="checkbox" id="24hour"></label>
+          <label class="toggle-row"><span>Show 7-day forecast</span><input type="checkbox" id="showForecast" checked></label>
+          <button class="secondary-button" id="refreshAll">Refresh calendars and weather</button>
+        </section>
+      </div>
+      <div class="settings-bottom"><span id="settingsMessage" role="status"></span><button class="primary-button" id="doneSettings">Done</button></div>
+    </section>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="app.js"></script>
+</body>
+</html>
